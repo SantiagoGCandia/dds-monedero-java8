@@ -21,7 +21,7 @@ public class Cuenta {
   public void poner(double cuanto) {
     validarMonto(cuanto);
     exede3DepositosDiarios();
-    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
+    agregarMovimiento(cuanto, true);
   }
 
   public void sacar(double cuanto) {
@@ -31,12 +31,13 @@ public class Cuenta {
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = 1000 - montoExtraidoHoy;
     exedeLimiteDeExtraccion(cuanto , limite);
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+    agregarMovimiento(cuanto, false);
   }
 
-  public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
-    Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
+  public void agregarMovimiento( double cuanto, boolean tipoMovimiento) {
+    Movimiento movimiento = new Movimiento(LocalDate.now(), cuanto, tipoMovimiento);
     movimientos.add(movimiento);
+    setSaldo(movimiento.calcularValor(this));
   }
 
   public double getMontoExtraidoA(LocalDate fecha) {
