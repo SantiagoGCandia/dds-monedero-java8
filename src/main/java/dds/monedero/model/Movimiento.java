@@ -19,17 +19,17 @@ public abstract class Movimiento {
     return monto;
   }
 
-  public LocalDate getFecha() {
-    return fecha;
-  }
-
   public boolean fueDepositado(LocalDate fecha) {
     return false;
   }
+
   public boolean fueExtraido(LocalDate fecha) {
     return false;
   }
+
   public boolean isDeposito() {return false;}
+
+  public boolean isExtraccion() {return false;}
 
   public boolean esDeLaFecha(LocalDate fecha) {
     return this.fecha.equals(fecha);
