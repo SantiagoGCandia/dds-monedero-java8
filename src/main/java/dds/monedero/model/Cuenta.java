@@ -12,15 +12,17 @@ import java.util.List;
 public class Cuenta {
 
   private double saldo;
+  private Integer limiteExtraccionDiario;
+  private Integer limiteDepositoDiario;
   private List<Movimiento> movimientos = new ArrayList<>();
 
   public Cuenta() {
-    saldo = 0;
+    saldo = 0; limiteExtraccionDiario = 1000; limiteDepositoDiario=3;
   }
 
   public void poner(double cuanto) {
     validarMonto(cuanto);
-    exede3DepositosDiarios();
+    exedeDepositosDiarios(limiteDepositoDiario);
     agregarMovimiento(new Deposito(LocalDate.now(), cuanto));
   }
 
@@ -28,7 +30,7 @@ public class Cuenta {
     validarMonto(cuanto);
     saldoNoDisponible(cuanto);
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
-    double limite = 1000 - montoExtraidoHoy;
+    double limite = limiteExtraccionDiario - montoExtraidoHoy;
     exedeLimiteDeExtraccion(cuanto , limite);
     agregarMovimiento(new Extraccion(LocalDate.now(), cuanto));
   }
@@ -65,7 +67,7 @@ public class Cuenta {
 
   private void exedeLimiteDeExtraccion(double cuanto, double limite) {
     if ( cuanto > limite) {
-      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
+      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + limiteExtraccionDiario
           + " diarios, límite: " + limite);
     }
   }
@@ -76,9 +78,9 @@ public class Cuenta {
     }
   }
 
-  private void exede3DepositosDiarios() {
-    if (getMovimientos().stream().filter(Movimiento::isDeposito).count() >= 3) {
-      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
+  private void exedeDepositosDiarios(Integer limiteDepositoDiario) {
+    if (getMovimientos().stream().filter(Movimiento::isDeposito).count() >= limiteDepositoDiario) {
+      throw new MaximaCantidadDepositosException("Ya excedio los " + limiteDepositoDiario + " depositos diarios");
     }
   }
 }
