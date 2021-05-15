@@ -33,7 +33,7 @@ public class Cuenta {
     exedeLimiteDeExtraccion(cuanto , limite);
     new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
   }
-  
+
   public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
     Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
     movimientos.add(movimiento);
@@ -66,7 +66,8 @@ public class Cuenta {
 
   private void exedeLimiteDeExtraccion(double cuanto, double limite) {
     if ( cuanto > limite) {
-      throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
+      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
+          + " diarios, límite: " + limite);
     }
   }
 
