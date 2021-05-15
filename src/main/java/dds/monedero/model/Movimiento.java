@@ -29,8 +29,6 @@ public abstract class Movimiento {
 
   public boolean isDeposito() {return false;}
 
-  public boolean isExtraccion() {return false;}
-
   public boolean esDeLaFecha(LocalDate fecha) {
     return this.fecha.equals(fecha);
   }
